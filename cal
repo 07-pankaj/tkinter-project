@@ -1,0 +1,97 @@
+from tkinter import *
+root=Tk()
+
+# title
+root.title('calculator'.upper())
+
+# defining entry widget
+cal_entry=Entry(root,bd=10,relief='groove',width=20,font=('callibri',20))
+cal_entry.grid(padx=10,pady=10,columnspan=4,row=0,column=0)
+
+def click(num):
+    val=cal_entry.get()
+    cal_entry.delete(0,END)
+    cal_entry.insert(0,str(val)+str(num))
+
+# defining add function
+def add():
+    global first_number
+    first_number =cal_entry.get()
+    cal_entry.delete(0,END)
+    global operation
+    operation='add'
+
+# defining sub function
+def sub():
+    global first_number
+    first_number = cal_entry.get()
+    cal_entry.delete(0, END)
+    global operation
+    operation = 'sub'
+
+# defining mul function
+def mul():
+    global first_number
+    first_number = cal_entry.get()
+    cal_entry.delete(0, END)
+    global operation
+    operation = 'mul'
+
+# defining div function
+def div():
+    global first_number
+    first_number = cal_entry.get()
+    cal_entry.delete(0, END)
+    global operation
+    operation = 'div'
+
+# defining equal function
+def equal():
+    try:
+        second_number=cal_entry.get()
+        cal_entry.delete(0,END)
+        if operation =='add':
+            cal_entry.insert(0,int(first_number)+int(second_number))
+        elif operation=='mul':
+            cal_entry.insert(0,int(first_number)*int(second_number))
+        elif operation=='div':
+            cal_entry.insert(0,int(first_number)/int(second_number))
+        elif operation == 'sub':
+            cal_entry.insert(0, int(first_number) - int(second_number))
+        else:
+            cal_entry.insert(0,'0')
+    except:
+        cal_entry.insert(0,'0')
+
+# defining clear button function
+def clear():
+    cal_entry.delete(0,END)
+
+
+# defining Button for row one
+button7=Button(root,text='7',padx=34,pady=20,font=('callibri',12),command=lambda:click(7)).grid(row=1,column=0)
+button8=Button(root,text='8',padx=34,pady=20,font=('callibri',12),command=lambda:click(8)).grid(row=1,column=1)
+button9=Button(root,text='9',padx=34,pady=20,font=('callibri',12),command=lambda:click(9)).grid(row=1,column=2)
+button_div=Button(root,text='/',padx=34,pady=20,font=('callibri',12),command=div).grid(row=1,column=3)
+
+# defining button for row two
+button4=Button(root,text='4',padx=34,pady=20,font=('callibri',12),command=lambda:click(4)).grid(row=2,column=0)
+button5=Button(root,text='5',padx=34,pady=20,font=('callibri',12),command=lambda:click(5)).grid(row=2,column=1)
+button6=Button(root,text='6',padx=34,pady=20,font=('callibri',12),command=lambda:click(6)).grid(row=2,column=2)
+button_mul=Button(root,text='x',padx=34,pady=20,font=('callibri',12),command=mul).grid(row=2,column=3)
+
+# defining button for row third
+button1=Button(root,text='1',padx=34,pady=20,font=('callibri',12),command=lambda:click(1)).grid(row=3,column=0)
+button2=Button(root,text='2',padx=34,pady=20,font=('callibri',12),command=lambda:click(2)).grid(row=3,column=1)
+button3=Button(root,text='3',padx=34,pady=20,font=('callibri',12),command=lambda:click(3)).grid(row=3,column=2)
+button_add=Button(root,text='+',padx=34,pady=20,font=('callibri',12),command=add).grid(row=3,column=3)
+
+# defining button for row third
+button_equal=Button(root,text='=',padx=34,pady=20,font=('callibri',12),command=equal).grid(row=4,column=2)
+button0=Button(root,text='0',padx=34,pady=20,font=('callibri',12),command=lambda:click(0)).grid(row=4,column=1)
+button_clear=Button(root,text='clear',padx=25,pady=22,font=('callibri',10),command=clear).grid(row=4,column=0)
+button_sub=Button(root,text='-',padx=34,pady=20,font=('callibri',12),command=sub).grid(row=4,column=3)
+
+root.mainloop()
+
+
