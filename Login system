@@ -1,0 +1,244 @@
+from tkinter import *
+from tkinter import messagebox
+
+root=Tk()
+
+width=500
+height=350
+root.title('Login page')                  # title for main window
+root.geometry(f'{width}x{height}')   # setting size of window
+root.config(bg='cyan')               # setting background of main window
+
+# creating dicinariy
+# root is default id to login root
+# password for root is "root"
+user_dictionary={'root':{'password':'root'}}
+user_sq=['name','gender','password','recovery_mail']
+print('root and root are  default login id and password ')
+
+# sign up function
+def creating_account(top,user_id,first_name,gender,password,password2,recovery_email):
+    if len(user_id.get())==0 or len(first_name.get())==0 or len(password.get())==0 or len(password2.get())==0 :
+        sign_up_error_label.config(text='please enter correct detail')
+    elif password.get()!=password2.get():
+        messagebox.showerror('password error','password does not match')
+    else:
+        user_dictionary[user_id.get()]=dict.fromkeys(user_sq)
+        user_dictionary[user_id.get()]['name']=first_name.get()
+        user_dictionary[user_id.get()]['gender'] = gender.get()
+        user_dictionary[user_id.get()]['password'] = password.get()
+        user_dictionary[user_id.get()]['recovery_mail'] = recovery_email.get()
+        messagebox.showinfo('sucessfull login','Account created Sucessfully')
+        top.destroy()
+        name_entry.delete(0,END)
+        password_entry.delete(0,END)
+        sign_in_error_label.config(text='',bg='blue')
+
+        # new user list display in terminal(new sign up account display in terminal)
+        #print(user_dictionary)
+        print('new user : ',user_id.get(),user_dictionary[user_id.get()])
+
+
+# creating account when sign up button is press
+def sign_up_function():
+    width_top=500
+    height_top=550
+
+    top=Toplevel(bg='#2424ff')
+    top.title('Sign up page')
+    top.geometry(f'{width_top}x{height_top}')
+
+    label=Label(top,text='Create new account ',bg='black',fg='white',font=('Helvetica', 13, 'bold italic')).pack(pady=10)
+
+    user_id = Label(top, text='User id or email address',font=('Helvetica', 13, 'bold italic'))
+    user_id_entry = Entry(top,font=('calibri', 15, 'bold'),width=32)
+
+    first_name=Label(top,text='User Name or First_name ',font=('Helvetica', 13, 'bold italic'))
+    first_name_entry=Entry(top,font=('calibri', 15, 'bold'), width=32)
+    global var
+    var = StringVar()
+
+    gender_label = Label(top, text='Gender', font=('Helvetica', 13, 'bold italic'),width=7)
+    gender_male_button=Radiobutton(top,text='Male',variable=var,value='Male',font=('Helvetica', 11,'bold italic'),width=7)
+    gender_female_button=Radiobutton(top,text='Female',variable=var,value='Female',font=('Helvetica',11,'bold italic'),width=7)
+    gender_male_button.select()
+
+    password_label=Label(top,text='New password',font=('Helvetica', 13, 'bold italic'))
+    password_entry_top=Entry(top,font=('calibri', 15, 'bold'), width=32)
+
+    confirm_password_label=Label(top,text='Confirm password',font=('Helvetica', 13, 'bold italic'))
+    confirm_password_entry=Entry(top,font=('calibri', 15, 'bold'), width=32)
+
+    password_recovery_label = Label(top, text='email address for recovering password',
+                                       font=('Helvetica', 13, 'bold italic'))
+    password_recovery_entry = Entry(top, font=('calibri', 15, 'bold'), width=32)
+
+    # sign up button
+    create_button=Button(top,text='Create account',font=('calibri',12,'underline'),padx=18,pady=5,
+                         command=lambda :creating_account(top,user_id_entry,first_name_entry,var,password_entry_top,confirm_password_entry,
+                                                          password_recovery_entry))
+
+    # placing all widget on display
+    user_id.place(x=100, y=50)
+    user_id_entry.place(x=100, y=80)
+
+    first_name.place(x=100,y=115)
+    first_name_entry.place(x=100,y=145)
+
+    gender_label.place(x=100,y=183)
+    gender_male_button.place(x=190,y=182)
+    gender_female_button.place(x=290,y=182)
+
+    password_label.place(x=100,y=220)
+    password_entry_top.place(x=100,y=250)
+
+    confirm_password_label.place(x=100,y=285)
+    confirm_password_entry.place(x=100,y=315)
+
+    password_recovery_label.place(x=100, y=350)
+    password_recovery_entry.place(x=100, y=380)
+
+    create_button.place(x=100,y=425)
+
+    # creating label for showing error in sign up page
+    global sign_up_error_label
+    sign_up_error_label=Label(top,text='', font=('Helvetica', 13, 'bold italic'),bg='#2424ff')
+    sign_up_error_label.place(x=180,y=490)
+
+# logout function
+def logout_function(top):
+    top.destroy()
+    name_entry.delete(0, END)
+    password_entry.delete(0, END)
+
+
+# sign in function
+def sign_in_function():
+
+    if len(name_entry.get())==0:
+        sign_in_error_label.config(text='please enter user name', bg='black', fg='white')
+    elif len(password_entry.get())==0:
+        sign_in_error_label.config(text='please enter password', bg='black', fg='white')
+    elif name_entry.get() in user_dictionary:
+        if user_dictionary[name_entry.get()]['password']==password_entry.get():
+            messagebox.showinfo('User login','Sucessfull Login')
+            sign_in_error_label.config(text='', bg='blue')
+            top=Toplevel()
+            top.geometry('570x300')
+            top.config(bg='#950000')
+            Label(top,text='Welcome to python world',bg='#950000',padx=30,pady=100,font=('Helvetica',30,'bold italic')).place(x=10,y=50)
+            button1=Button(top,text='Logout',font=('calibri',12,'underline'),padx=18,pady=5,command=lambda:logout_function(top))
+            button1.place(x=470,y=50)
+        else:
+            messagebox.showerror('Invalid ','Invalid Password')
+    else:
+        sign_in_error_label.config(text='Invalid user', bg='black', fg='white')
+
+def reset_password(id,password1,password2,top):
+    print(user_dictionary)
+    if password1.get() == password2.get():
+        user_dictionary[id.get()]['password'] = password1.get()
+        messagebox.showinfo('password reset', 'Password Reset sucessfull')
+        top.destroy()
+        name_entry.delete(0, END)
+        password_entry.delete(0, END)
+        sign_in_error_label.config(text='',bg='blue')
+        print(user_dictionary)
+        print('password reset for id ',id.get())
+# function for reset password
+def set_password(id,button,top):
+    if id.get() in user_dictionary:
+        id.config(state=DISABLED)
+        button.config(state=DISABLED)
+        l=Label(top,text='create new password',font=('Helvetica', 13, 'bold italic'))
+        l.place(x=100,y=160)
+        entry_in_new=Entry(top,font=('calibri', 15, 'bold'), width=32)
+        entry_in_new.place(x=100,y=190)
+        l1 = Label(top, text='confirm password', font=('Helvetica', 13, 'bold italic'))
+        l1.place(x=100, y=230)
+        entry_in_new1 = Entry(top, font=('calibri', 15, 'bold'), width=32)
+        entry_in_new1.place(x=100, y=260)
+        password_reset_button = Button(top, text='Reset password', font=('calibri', 10, 'underline'), padx=15, pady=5,
+                                       command=lambda :reset_password(id,entry_in_new,entry_in_new1,top))
+        password_reset_button.place(x=150, y=310)
+
+
+    else:
+        Label(top,text='Invalid user',font=('calibri', 15, 'underline'),bg='red').place(x=170,y=190)
+
+
+# function for called when forgot password is press
+def forgot_password():
+
+    top=Toplevel(bg='red')
+    width1=500
+    height1=400
+    top.title('password reset')
+    top.geometry(f'{width1}x{height1}')
+
+    my_user1 = Label(top, text='Enter your email address',font=('Helvetica', 13, 'bold italic'))
+    my_user1.place(x=100, y=50)
+    name_entry_in_reset= Entry(top , font=('calibri', 15, 'bold'), width=32)
+    name_entry_in_reset.place(x=100, y=85)
+    Enter_button1 = Button(top, text='ENTER',font=('calibri', 10, 'underline'), padx=15, pady=5,
+                          command=lambda: set_password(name_entry_in_reset,Enter_button1,top))
+    Enter_button1.place(x=100, y=120)
+
+# label to print user name
+my_user=Label(root,text='Username or email address',font=('Helvetica',13,'bold italic'))
+
+# entry widget for name
+name_entry=Entry(root,font=('calibri',15,'bold'),width=32)
+
+# label for password
+my_password=Label(root,text='Password',font=('Helvetica',13,'bold italic'))
+
+# entry widget for password
+password_entry=Entry(root,font=('calibri',15,'bold italic'),show='*',width=32)
+
+
+# button for forgot password
+forget_password_button=Button(root,text='Forget password?',font=('calibri',8,'bold italic'),command=forgot_password)
+
+# function to show password
+def show_password_function():
+    if show_pass_var.get()==1:
+        password_entry.config(show='')
+    elif show_pass_var.get()==0:
+        password_entry.config(show='*')
+
+
+# checkbutton for show password
+show_pass_var=IntVar()
+show_password_button=Checkbutton(root,text='show password',variable=show_pass_var,onvalue=1,offvalue=0,command=show_password_function)
+
+# button for sign in
+sign_in_button=Button(root,text='Sign',font=('calibri',12,'underline'),padx=18,pady=5,command=sign_in_function)
+
+# button for sign up
+sign_up_button=Button(root,text='Sign Up',font=('calibri',12,'underline'),padx=10,pady=5,command=sign_up_function)
+
+# label to invalid password or enter password or enter id
+sign_in_error_label=Label(root, text='', bg='blue', font=('calibri', 12, 'underline'))
+
+# placing button on window
+my_user.place(x=100,y=50)
+name_entry.place(x=100,y=85)
+
+# placing password and forgot password and entry widget
+my_password.place(x=100,y=123)
+forget_password_button.place(x=330,y=126)
+password_entry.place(x=100,y=155)
+
+# placing checkbutton name show password
+show_password_button.place(x=100,y=190)
+
+# placing sign in and sign up button
+sign_in_button.place(x=100,y=230)
+sign_up_button.place(x=250,y=230)
+
+# show error on Login page
+sign_in_error_label.place(x=150, y=290)
+
+# main loop
+root.mainloop()
